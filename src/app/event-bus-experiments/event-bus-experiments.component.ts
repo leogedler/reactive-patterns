@@ -1,3 +1,4 @@
+import { Lesson } from './../shared/model/lesson';
 import { testLessons } from './../shared/model/test-lessons';
 import { globalEventBus, LESSONS_LIST_AVAILABLE, ADD_NEW_LESSON } from './evet-bus';
 import { Component, OnInit } from '@angular/core';
@@ -11,9 +12,25 @@ export class EventBusExperimentsComponent implements OnInit {
 
   constructor() { }
 
+  private lessons: Lesson[] = [];
+
   ngOnInit() {
     console.log('Top level component bradcasted all lessons...');
-    globalEventBus.notifyObservers(LESSONS_LIST_AVAILABLE, testLessons.slice(0))
+
+    this.lessons = testLessons.slice(0);
+
+    globalEventBus.notifyObservers(LESSONS_LIST_AVAILABLE, this.lessons);
+
+    setTimeout(() =>{
+      this.lessons.push({
+        id: Math.random(),
+        description: 'New lesson arriving from the backend'
+      });
+
+      globalEventBus.notifyObservers(LESSONS_LIST_AVAILABLE, this.lessons);
+
+    }, 10000)
+
   }
 
 
