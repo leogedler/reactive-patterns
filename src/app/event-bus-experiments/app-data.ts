@@ -1,47 +1,15 @@
 import { Lesson } from './../shared/model/lesson';
 import * as _ from 'lodash';
+import {Observer, Observable, BehaviorSubject} from 'rxjs'
 
-export interface Observer {
-    next(data:any);
-}
 
-export interface Observable {
-    subscribe(obs:Observer);
-    unsubscribe(obs:Observer);
-}
-
-interface Subject extends Observer, Observable {
-
-}
-
-class SubjectImplementation implements Subject {
-    private observers: Observer[] = [];
-
-    next(data:any){
-        this.observers.forEach(obs => obs.next(data));
-    }
-
-    subscribe(obs:Observer){
-        this.observers.push(obs);
-    }
-
-    unsubscribe(obs:Observer){
-        _.remove(this.observers, el => el === obs);
-    }
-}
 
 class DataStore {
     private lessons: Lesson[] = [];
 
-    private lessonListSubject = new SubjectImplementation();
+    private lessonListSubject = new BehaviorSubject([]);
 
-    public lessonList$: Observable = {
-        subscribe: obs => {
-            this.lessonListSubject.subscribe(obs);
-            obs.next(this.lessons);
-        },
-        unsubscribe: obs => this.lessonListSubject.unsubscribe(obs)
-    };
+    public lessonList$: Observable<Lesson[]> = this.lessonListSubject.asObservable();
 
     initializeLessonList(newList: Lesson[]){
         this.lessons = _.cloneDeep(newList);

@@ -1,5 +1,6 @@
-import { Observer, store } from './../event-bus-experiments/app-data';
+import { store } from './../event-bus-experiments/app-data';
 import { Lesson } from './../shared/model/lesson';
+import { Observer } from 'rxjs';
 
 import { Component, OnInit } from '@angular/core';
 
@@ -10,7 +11,7 @@ import * as _ from 'lodash';
   templateUrl: './lessons-list.component.html',
   styleUrls: ['./lessons-list.component.css']
 })
-export class LessonsListComponent implements OnInit, Observer {
+export class LessonsListComponent implements OnInit, Observer<Lesson[]> {
 
   lessons: Lesson[] = [];
 
@@ -19,12 +20,20 @@ export class LessonsListComponent implements OnInit, Observer {
   ngOnInit() {
     console.log('Lessons list component is registed as observer...');
     
-    store.lessonList$.subscribe(this);
+    store.lessonList$.subscribe((this));
   }
 
   next(data:Lesson[]){
     console.log('Lessons list component received data...');
     this.lessons = data;
+  }
+
+  error(err:any){
+    console.log(err);
+  }
+
+  complete(){
+    console.log('completed');
   }
 
   toggleLessonViewed(lesson:Lesson) {
