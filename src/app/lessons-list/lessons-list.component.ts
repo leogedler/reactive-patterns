@@ -20,7 +20,7 @@ export class LessonsListComponent implements OnInit, Observer<Lesson[]> {
   ngOnInit() {
     console.log('Lessons list component is registed as observer...');
     
-    store.lessonList$.subscribe((this));
+    store.lessonList$.subscribe(this);
   }
 
   next(data:Lesson[]){

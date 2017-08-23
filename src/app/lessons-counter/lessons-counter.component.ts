@@ -1,7 +1,7 @@
+import { Observer } from 'rxjs';
 import { store } from './../event-bus-experiments/app-data';
 import { Lesson } from './../shared/model/lesson';
 import { Component, OnInit } from '@angular/core';
-import { Observer } from 'rxjs';
 
 @Component({
   selector: 'lessons-counter',
