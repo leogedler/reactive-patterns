@@ -1,5 +1,5 @@
+import { CoursesService } from './../services/courses.service';
 import { Component, OnInit } from '@angular/core';
-import {AngularFireDatabase} from 'angularfire2';
 import {ActivatedRoute} from '@angular/router';
 import {Course} from "../shared/model/course";
 import {Lesson} from "../shared/model/lesson";
@@ -16,7 +16,7 @@ export class CourseDetailComponent implements OnInit {
   course: Course;
   lessons: Lesson[];
 
-  constructor(private route: ActivatedRoute, private db: AngularFireDatabase) {
+  constructor(private route: ActivatedRoute, private coursesService: CoursesService) {
 
 
       route.params
@@ -24,23 +24,12 @@ export class CourseDetailComponent implements OnInit {
 
               const courseUrl = params['id'];
 
-              this.db.list('courses', {
-                  query: {
-                      orderByChild: 'url',
-                      equalTo: courseUrl
-                  }
-              })
-              .map( data => data[0])
+              this.coursesService.findCourseByUrl(courseUrl)
               .subscribe(data => {
                   this.course = data;
 
-                  this.db.list('lessons', {
-                          query: {
-                              orderByChild: 'courseId',
-                              equalTo: data.$key
-                          }
-                      })
-                      .subscribe(lessons => this.lessons = lessons);
+                  this.coursesService.findLessonsForCourse(this.course.id)
+                    .subscribe(lessons => this.lessons = lessons);
               });
 
           });
