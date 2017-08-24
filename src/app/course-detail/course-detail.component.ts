@@ -18,21 +18,15 @@ export class CourseDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private coursesService: CoursesService) {
 
+    route.params.subscribe( params => {
 
-      route.params
-          .subscribe( params => {
+      const courseUrl = params['id'];
+      this.coursesService.findCourseByUrl(courseUrl).subscribe(data => {
+          this.course = data;
+          this.coursesService.findLessonsForCourse(this.course.id).subscribe(lessons => this.lessons = lessons);
+      });
 
-              const courseUrl = params['id'];
-
-              this.coursesService.findCourseByUrl(courseUrl)
-              .subscribe(data => {
-                  this.course = data;
-
-                  this.coursesService.findLessonsForCourse(this.course.id)
-                    .subscribe(lessons => this.lessons = lessons);
-              });
-
-          });
+    });
 
   }
 
