@@ -1,3 +1,4 @@
+import { UserService } from './../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Course} from "../shared/model/course";
@@ -18,23 +19,9 @@ export class CourseDetailComponent implements OnInit {
   lessons: Lesson[];
 
   constructor(private route: ActivatedRoute,
-              private coursesService: CoursesService,
-              private newsletterService: NewsletterService) {
-
-      route.params
-          .subscribe( params => {
-
-              const courseUrl = params['id'];
-
-              this.coursesService.findCourseByUrl(courseUrl)
-              .subscribe(data => {
-                  this.course = data;
-
-                  this.coursesService.findLessonsForCourse(this.course.id)
-                    .subscribe(lessons => this.lessons = lessons);
-              });
-
-          });
+                private coursesService: CoursesService,
+                private newsletterService: NewsletterService,
+                private userService: UserService) {
 
   }
 
@@ -49,7 +36,20 @@ export class CourseDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.route.params
+    .subscribe( params => {
 
+        const courseUrl = params['id'];
+
+        this.coursesService.findCourseByUrl(courseUrl)
+        .subscribe(data => {
+            this.course = data;
+
+            this.coursesService.findLessonsForCourse(this.course.id)
+              .subscribe(lessons => this.lessons = lessons);
+        });
+
+    });
   }
 
 }
