@@ -1,3 +1,4 @@
+import { MessagesService } from './services/messages.service';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
@@ -27,6 +28,7 @@ import {LessonDetailComponent} from './lesson-detail/lesson-detail.component';
 import {CoursesHttpService} from "./services/courses-http.service";
 import {SafeUrlPipe} from "./shared/pipes/safe-url.pipe";
 import {LessonsPagerService} from "./services/lessons-pager.service";
+import { MessagesComponent } from './messages/messages.component';
 
 
 @NgModule({
@@ -46,7 +48,8 @@ import {LessonsPagerService} from "./services/lessons-pager.service";
         AllLessonsComponent,
         CourseComponent,
         LessonDetailComponent,
-        SafeUrlPipe
+        SafeUrlPipe,
+        MessagesComponent
     ],
     imports: [
         BrowserModule,
@@ -59,7 +62,8 @@ import {LessonsPagerService} from "./services/lessons-pager.service";
         CoursesService,
         NewsletterService,
         UserService,
-        CoursesHttpService
+        CoursesHttpService,
+        MessagesService
     ],
     bootstrap: [AppComponent]
 })

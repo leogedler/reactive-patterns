@@ -1,3 +1,4 @@
+import { MessagesService } from './../services/messages.service';
 import {Component, OnInit, Input, OnDestroy} from '@angular/core';
 import {Observable} from "rxjs";
 import {Lesson} from "../shared/model/lesson";
@@ -22,7 +23,8 @@ export class CourseComponent implements OnInit, OnDestroy {
     detail$: Observable<Lesson>;
 
     constructor(private coursesService: CoursesHttpService,
-                private lessonsPager:LessonsPagerService) {
+                private lessonsPager:LessonsPagerService,
+                private messagesService: MessagesService) {
 
     }
 
@@ -30,15 +32,27 @@ export class CourseComponent implements OnInit, OnDestroy {
         this.course$ = this.coursesService.findCourseById(this.id);
         this.lessons$ = this.lessonsPager.lessonsPage$;
 
-        this.lessonsPager.loadFirstPage(this.id);
+        this.lessonsPager.loadFirstPage(this.id)
+            .subscribe(
+                ()=>{},
+                err => this.messagesService.error('Error loading the first page')
+            );
     }
 
     previousLessonsPage() {
-        this.lessonsPager.previous();
+        this.lessonsPager.previous()            
+        .subscribe(
+            ()=>{},
+            err => this.messagesService.error('Error loading the previous page')
+        );
     }
 
     nextLessonsPage() {
-        this.lessonsPager.next();
+        this.lessonsPager.next()
+        .subscribe(
+            ()=>{},
+            err => this.messagesService.error('Error loading the next page')
+        );
     }
 
     selectDetail(lesson:Lesson) {
